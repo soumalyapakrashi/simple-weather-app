@@ -44,9 +44,9 @@ body {
 }
 
 #highlights-grid {
-    display: grid;
+    /* display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 15px;
+    gap: 15px; */
     margin: 20px 0px;
 }
 
@@ -61,7 +61,7 @@ body {
 
 .card-unit {
     font-size: 1rem;
-    margin: 0px 5px;
+    margin: 0px 0px 0px 5px;
 }
 
 #highlights-header {
@@ -75,12 +75,10 @@ body {
 .card-image-container {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 #forecast-highlights {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 8px;
     margin-bottom: 30px;
 }
 
@@ -132,4 +130,8 @@ body {
 
 .dropdown {
     margin: 0px;
+}
+
+.card-body-no-right-padding {
+    padding-right: 0px !important;
 }

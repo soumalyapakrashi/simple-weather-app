@@ -95,7 +95,7 @@ function updateCurrentWeatherData() {
 }
 
 function updateTodaysHighlights() {
-    const highlights_grid = document.querySelector('#highlights-grid');
+    const highlights_grid = document.querySelector('#highlights-grid .row');
     let highlights_cards = '';
 
     const highlights_points = [
@@ -199,7 +199,9 @@ function updateTodaysHighlights() {
 
     highlights_points.forEach(point => {
         highlights_cards = `${highlights_cards}
-        ${point.multiple_units ? HighlightsCardMultiUnit(point) : HighlightsCardSingleUnit(point)}
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            ${point.multiple_units ? HighlightsCardMultiUnit(point) : HighlightsCardSingleUnit(point)}
+        </div>
         `
     });
 
@@ -208,7 +210,7 @@ function updateTodaysHighlights() {
 
 function HighlightsCardSingleUnit(point) {
     return `
-    <div class="card">
+    <div class="card h-100">
         <div class="row g-0">
             <div class="col-md-8">
                 <div class="card-body">
@@ -237,10 +239,10 @@ function HighlightsCardMultiUnit(point) {
     }
 
     return `
-    <div class="card">
+    <div class="card h-100">
         <div class="row g-0">
             <div class="col-md-8">
-                <div class="card-body">
+                <div class="card-body card-body-no-right-padding">
                     <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
                     <h3 class="card-title">
                         ${point.value}
@@ -265,7 +267,7 @@ function HighlightsCardMultiUnit(point) {
 }
 
 function updateForecastHighlights() {
-    const forecast_grid = document.querySelector('#forecast-highlights');
+    const forecast_grid = document.querySelector('#forecast-highlights .row');
     let highlights_cards = '';
 
     weather_data?.forecast?.forecastday.forEach(day => {
@@ -275,14 +277,16 @@ function updateForecastHighlights() {
         const min_temp = temperature_metric === 'celsius' ? day?.day?.mintemp_c : day?.day?.mintemp_f;
 
         highlights_cards = `${highlights_cards}
-        <div class="card forecast-card">
-            <h6 class="card-subtitle">${getDayName(date).substring(0, 3)}</h6>
-            <img src="${condition_image}" class="card-img-top forecast-image" alt="weather-image">
-            <div class="card-body p-0">
-                <p class="card-text">
-                    <span class="forecast-max-temp">${Math.round(max_temp)}°</span>
-                    <span class="forecast-min-temp">${Math.round(min_temp)}°</span>
-                </p>
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 col-xl">
+            <div class="card forecast-card">
+                <h6 class="card-subtitle">${getDayName(date).substring(0, 3)}</h6>
+                <img src="${condition_image}" class="card-img-top forecast-image" alt="weather-image">
+                <div class="card-body p-0">
+                    <p class="card-text">
+                        <span class="forecast-max-temp">${Math.round(max_temp)}°</span>
+                        <span class="forecast-min-temp">${Math.round(min_temp)}°</span>
+                    </p>
+                </div>
             </div>
         </div>
         `
