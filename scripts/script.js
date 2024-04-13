@@ -144,7 +144,9 @@ function updateTodaysHighlights() {
                     else if(value > 117) return 'Hurricane'
                 }
             },
-            img: '../assets/svg/Wind Speed Updated.svg'
+            img: '../assets/svg/Wind Speed Updated.svg',
+            multiple_units: true,
+            multiple_values: [ 'km/h', 'mph' ]
         },
         {
             title: 'Wind Direction',
@@ -158,21 +160,27 @@ function updateTodaysHighlights() {
             value: `${weather_data?.current?.vis_km}`,
             unit: 'km',
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Visibility.svg'
+            img: '../assets/svg/Visibility.svg',
+            multiple_units: true,
+            multiple_values: [ 'km', 'mi' ]
         },
         {
             title: 'Precipitation',
             value: `${weather_data?.current?.precip_mm}`,
             unit: 'mm',
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Precipitation.svg'
+            img: '../assets/svg/Precipitation.svg',
+            multiple_units: true,
+            multiple_values: [ 'mm', 'in' ]
         },
         {
             title: 'Pressure',
             value: `${weather_data?.current?.pressure_in}`,
             unit: 'in',
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Pressure.svg'
+            img: '../assets/svg/Pressure.svg',
+            multiple_units: true,
+            multiple_values: [ 'in', 'mb' ]
         },
         {
             title: 'Cloud Cover',
@@ -191,24 +199,69 @@ function updateTodaysHighlights() {
 
     highlights_points.forEach(point => {
         highlights_cards = `${highlights_cards}
-        <div class="card">
-            <div class="row g-0">
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
-                        <h3 class="card-title">${point.value}<span class="card-unit">${point.unit}</span></h3>
-                        <p class="card-text"><small class="text-body-secondary">${point.text(point.value, point.unit)}</small></p>
-                    </div>
-                </div>
-                <div class="col-md-4 card-image-container">
-                    <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
-                </div>
-            </div>
-        </div>
+        ${point.multiple_units ? HighlightsCardMultiUnit(point) : HighlightsCardSingleUnit(point)}
         `
     });
 
     highlights_grid.innerHTML = highlights_cards;
+}
+
+function HighlightsCardSingleUnit(point) {
+    return `
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
+                    <h3 class="card-title">${point.value}<span class="card-unit">${point.unit}</span></h3>
+                    <p class="card-text"><small class="text-body-secondary">${point.text(point.value, point.unit)}</small></p>
+                </div>
+            </div>
+            <div class="col-md-4 card-image-container">
+                <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
+            </div>
+        </div>
+    </div>
+    `;
+}
+
+function HighlightsCardMultiUnit(point) {
+    const dropdownListGenerator = values => {
+        let dropdown_string = '';
+        values.forEach(value => {
+            dropdown_string = `${dropdown_string}
+            <li><a class="dropdown-item" href="#">${value}</a></li>
+            `;
+        });
+        return dropdown_string;
+    }
+
+    return `
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
+                    <h3 class="card-title">
+                        ${point.value}
+                        <span class="card-unit dropdown">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                ${point.unit}
+                            </button>
+                            <ul class="dropdown-menu">
+                                ${dropdownListGenerator(point.multiple_values)}
+                            </ul>
+                        </span>
+                    </h3>
+                    <p class="card-text"><small class="text-body-secondary">${point.text(point.value, point.unit)}</small></p>
+                </div>
+            </div>
+            <div class="col-md-4 card-image-container">
+                <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
+            </div>
+        </div>
+    </div>
+    `;
 }
 
 function updateForecastHighlights() {

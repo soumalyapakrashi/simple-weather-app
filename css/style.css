@@ -124,3 +124,12 @@ body {
     justify-content: flex-end;
     margin-bottom: 30px;
 }
+
+.dropdown-toggle {
+    padding: 0px;
+    border: none;
+}
+
+.dropdown {
+    margin: 0px;
+}
