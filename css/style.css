@@ -1,0 +1,126 @@
+body {
+    min-height: 100vh;
+}
+
+.highlights {
+    background-color: rgb(245, 245, 245);
+    width: 100%;
+    flex-basis: 75%;
+    padding: 30px;
+}
+
+.current-data {
+    width: 100%;
+    flex-basis: 25%;
+    margin: 20px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+#search-icon {
+    width: 30px;
+}
+
+#current-weather-image {
+    margin-top: 20px;
+}
+
+.current-weather-image-img {
+    height: 150px;
+}
+
+#current-temperature {
+    font-size: 4rem;
+    font-weight: 400;
+}
+
+#feels-like-img {
+    height: 20px;
+    margin-right: 5px;
+}
+
+#highlights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0px;
+}
+
+.card {
+    border: none;
+}
+
+.card-subtitle {
+    font-size: 0.8rem;
+    color: rgb(163, 163, 163) !important;
+}
+
+.card-unit {
+    font-size: 1rem;
+    margin: 0px 5px;
+}
+
+#highlights-header {
+    font-size: 0.9rem;
+}
+
+.card-image {
+    height: 40px;
+}
+
+.card-image-container {
+    display: flex;
+    align-items: center;
+}
+
+#forecast-highlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.forecast-card {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.forecast-image {
+    width: 70px;
+}
+
+.forecast-card .card-text {
+    font-size: 1rem;
+}
+
+.forecast-min-temp {
+    color: rgb(183, 183, 183);
+}
+
+#temperature-toggle label {
+    height: 32px;
+    width: 32px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#temperature-toggle {
+    display: flex;
+    gap: 5px;
+}
+
+#controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
