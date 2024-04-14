@@ -5,6 +5,7 @@ let weather_data = null;
 let geocoding_data = null;
 let temperature_metric = 'celsius';
 const DEFAULT_LOCATION = 'Kolkata';
+let highlights_points = null;
 
 // Search form fetches the weather for the entered location.
 // Location is matched with the closest name matching the input string.
@@ -43,13 +44,15 @@ function getDataFromAPI(location) {
     })
     .then(data => {
         weather_data = data;
+        if(highlights_points === null) setHighlightsPoints();
         updateUI();
     })
     .catch(error => {
-        console.log(error);
+        document.querySelector('.toast-body').innerHTML = error;
+        const toast = document.querySelector('#live-toast');
+        const toast_bootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+        toast_bootstrap.show();
     })
-
-    updateUI();
 }
 
 function updateUI() {
@@ -78,7 +81,7 @@ function updateCurrentWeatherData() {
 
     // Update the location data showing the location of the entered string
     const location_data = document.querySelector('#location-data');
-    location_data.innerHTML = `${geocoding_data?.data[0]?.label}`;
+    location_data.innerHTML = `<img src="../assets/svg/Location.svg" alt="feels-like" class="current-data-img">${geocoding_data?.data[0]?.label}`;
 
     // Update the current date
     const current_date = document.querySelector('#current-date');
@@ -87,21 +90,18 @@ function updateCurrentWeatherData() {
     // Update the feels like
     const feels_like = document.querySelector('#current-feels-like');
     if(temperature_metric === 'celsius') {
-        feels_like.innerHTML = `<img src="../assets/svg/Feels Like.svg" alt="feels-like" id="feels-like-img">Feels Like: ${weather_data?.current?.feelslike_c}°C`;
+        feels_like.innerHTML = `<img src="../assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_c}°C`;
     }
     else if(temperature_metric === 'fahrenheit') {
-        feels_like.innerHTML = `<img src="../assets/svg/Feels Like.svg" alt="feels-like" id="feels-like-img">Feels Like: ${weather_data?.current?.feelslike_f}°F`;
+        feels_like.innerHTML = `<img src="../assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_f}°F`;
     }
 }
 
-function updateTodaysHighlights() {
-    const highlights_grid = document.querySelector('#highlights-grid .row');
-    let highlights_cards = '';
-
-    const highlights_points = [
+function setHighlightsPoints() {
+    highlights_points = [
         {
             title: 'UV Index',
-            value: weather_data?.current?.uv,
+            value: unit => weather_data?.current?.uv,
             unit: '',
             text: (value, unit) => {
                 if(value >= 1 && value <= 2) return 'Low'
@@ -114,7 +114,7 @@ function updateTodaysHighlights() {
         },
         {
             title: 'Humidity',
-            value: weather_data?.current?.humidity,
+            value: unit => weather_data?.current?.humidity,
             unit: '%',
             text: (value, unit) => {
                 if(value < 50) return 'Low';
@@ -125,7 +125,10 @@ function updateTodaysHighlights() {
         },
         {
             title: 'Wind Speed',
-            value: `${weather_data?.current?.wind_kph}`,
+            value: unit => {
+                if(unit === 'km/h') return weather_data?.current?.wind_kph;
+                else if(unit === 'mph') return weather_data?.current?.wind_mph;
+            },
             unit: 'km/h',
             text: (value, unit) => {
                 if(unit === 'km/h') {
@@ -143,6 +146,21 @@ function updateTodaysHighlights() {
                     else if(value > 102 && value <= 117) return 'Violent Storm'
                     else if(value > 117) return 'Hurricane'
                 }
+                else if(unit === 'mph') {
+                    if(value < 1) return 'Calm'
+                    else if(value >= 1 && value <= 3) return 'Light Air'
+                    else if(value > 3 && value <= 7) return 'Light Breeze'
+                    else if(value > 7 && value <= 12) return 'Gentle Breeze'
+                    else if(value > 12 && value <= 18) return 'Moderate Breeze'
+                    else if(value > 18 && value <= 24) return 'Fresh Breeze'
+                    else if(value > 24 && value <= 31) return 'Strong Breeze'
+                    else if(value > 31 && value <= 38) return 'Near Gale'
+                    else if(value > 38 && value <= 46) return 'Gale'
+                    else if(value > 46 && value <= 54) return 'Strong Gale'
+                    else if(value > 54 && value <= 63) return 'Storm'
+                    else if(value > 63 && value <= 72) return 'Violent Storm'
+                    else if(value > 72) return 'Hurricane'
+                }
             },
             img: '../assets/svg/Wind Speed Updated.svg',
             multiple_units: true,
@@ -150,14 +168,17 @@ function updateTodaysHighlights() {
         },
         {
             title: 'Wind Direction',
-            value: `${weather_data?.current?.wind_degree}°`,
+            value: unit => `${weather_data?.current?.wind_degree}°`,
             unit: `${weather_data?.current?.wind_dir}`,
             text: (value, unit) => { return '' },
             img: '../assets/svg/Wind Direction.svg'
         },
         {
             title: 'Visibility',
-            value: `${weather_data?.current?.vis_km}`,
+            value: unit => {
+                if(unit === 'km') return weather_data?.current?.vis_km;
+                else if(unit === 'mi') return weather_data?.current?.vis_miles;
+            },
             unit: 'km',
             text: (value, unit) => { return '' },
             img: '../assets/svg/Visibility.svg',
@@ -166,7 +187,10 @@ function updateTodaysHighlights() {
         },
         {
             title: 'Precipitation',
-            value: `${weather_data?.current?.precip_mm}`,
+            value: unit => {
+                if(unit === 'mm') return weather_data?.current?.precip_mm;
+                else if(unit === 'in') return weather_data?.current?.precip_in;
+            },
             unit: 'mm',
             text: (value, unit) => { return '' },
             img: '../assets/svg/Precipitation.svg',
@@ -175,7 +199,10 @@ function updateTodaysHighlights() {
         },
         {
             title: 'Pressure',
-            value: `${weather_data?.current?.pressure_in}`,
+            value: unit => {
+                if(unit === 'in') return weather_data?.current?.pressure_in;
+                else if(unit === 'mb') return weather_data?.current?.pressure_mb;
+            },
             unit: 'in',
             text: (value, unit) => { return '' },
             img: '../assets/svg/Pressure.svg',
@@ -184,7 +211,7 @@ function updateTodaysHighlights() {
         },
         {
             title: 'Cloud Cover',
-            value: weather_data?.current?.cloud,
+            value: unit => weather_data?.current?.cloud,
             unit: '',
             text: (value, unit) => {
                 if(value >= 0 && value < 2) return 'Clear Sky';
@@ -195,7 +222,72 @@ function updateTodaysHighlights() {
             },
             img: '../assets/svg/Cloud.svg'
         }
-    ]
+    ];
+}
+
+function updateTodaysHighlights() {
+    document.querySelector('#highlights-header').innerHTML = "Today's Highlights";
+
+    const highlights_grid = document.querySelector('#highlights-grid .row');
+    let highlights_cards = '';
+
+    const HighlightsCardSingleUnit = point => {
+        return `
+        <div class="card h-100">
+            <div class="row g-0">
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
+                        <h3 class="card-title">${point.value(point.unit)}<span class="card-unit">${point.unit}</span></h3>
+                        <p class="card-text"><small class="text-body-secondary">${point.text(point.value(point.unit), point.unit)}</small></p>
+                    </div>
+                </div>
+                <div class="col-md-4 card-image-container">
+                    <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
+                </div>
+            </div>
+        </div>
+        `;
+    }
+    
+    const HighlightsCardMultiUnit = point => {
+        const dropdownListGenerator = each_point => {
+            let dropdown_string = '';
+            each_point.multiple_values.forEach(value => {
+                dropdown_string = `${dropdown_string}
+                <option value="${value}" ${value === point.unit ? "selected" : ""}>${value}</option>
+                `;
+            });
+            return dropdown_string;
+        }
+    
+        return `
+        <div class="card h-100">
+            <div class="row g-0">
+                <div class="col-md-8">
+                    <div class="card-body card-body-no-right-padding">
+                        <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
+                        <h3 class="card-title">
+                            ${Math.round(point.value(point.unit) * 10) / 10}
+                            <span class="card-unit no-margin">
+                                <select 
+                                    class="selectpicker span3"
+                                    name="${point.title}"
+                                >
+                                    ${dropdownListGenerator(point)}
+                                </select>
+                            </span>
+                        </h3>
+                        <p class="card-text"><small class="text-body-secondary">${point.text(point.value(point.unit), point.unit)}</small></p>
+                    </div>
+                </div>
+                <div class="col-md-4 card-image-container">
+                    <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
+                </div>
+            </div>
+        </div>
+        `;
+    }
 
     highlights_points.forEach(point => {
         highlights_cards = `${highlights_cards}
@@ -206,71 +298,28 @@ function updateTodaysHighlights() {
     });
 
     highlights_grid.innerHTML = highlights_cards;
-}
 
-function HighlightsCardSingleUnit(point) {
-    return `
-    <div class="card h-100">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
-                    <h3 class="card-title">${point.value}<span class="card-unit">${point.unit}</span></h3>
-                    <p class="card-text"><small class="text-body-secondary">${point.text(point.value, point.unit)}</small></p>
-                </div>
-            </div>
-            <div class="col-md-4 card-image-container">
-                <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
-            </div>
-        </div>
-    </div>
-    `;
-}
+    const handleUnitChange = (title, value) => {
+        // Find the index of the object with the matching title
+        const index = highlights_points.findIndex(point => point.title === title);
+        
+        // Update the unit property of the object at that index
+        highlights_points[index].unit = value;
 
-function HighlightsCardMultiUnit(point) {
-    const dropdownListGenerator = values => {
-        let dropdown_string = '';
-        values.forEach(value => {
-            dropdown_string = `${dropdown_string}
-            <li><a class="dropdown-item" href="#">${value}</a></li>
-            `;
-        });
-        return dropdown_string;
-    }
+        updateTodaysHighlights();
+    };
 
-    return `
-    <div class="card h-100">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body card-body-no-right-padding">
-                    <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
-                    <h3 class="card-title">
-                        ${point.value}
-                        <span class="card-unit dropdown">
-                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                ${point.unit}
-                            </button>
-                            <ul class="dropdown-menu">
-                                ${dropdownListGenerator(point.multiple_values)}
-                            </ul>
-                        </span>
-                    </h3>
-                    <p class="card-text"><small class="text-body-secondary">${point.text(point.value, point.unit)}</small></p>
-                </div>
-            </div>
-            <div class="col-md-4 card-image-container">
-                <img src="${point.img}" alt="highlights-image" class="img-fluid rounded-start card-image">
-            </div>
-        </div>
-    </div>
-    `;
+    const selects = document.querySelectorAll('.selectpicker');
+    selects.forEach(select => {
+        select.addEventListener('change', event => handleUnitChange(event.target.name, event.target.value));
+    })
 }
 
 function updateForecastHighlights() {
     const forecast_grid = document.querySelector('#forecast-highlights .row');
     let highlights_cards = '';
 
-    weather_data?.forecast?.forecastday.forEach(day => {
+    weather_data?.forecast?.forecastday.forEach((day, index) => {
         const condition_image = day?.day?.condition?.icon;
         const date = day?.date;
         const max_temp = temperature_metric === 'celsius' ? day?.day?.maxtemp_c : day?.day?.maxtemp_f;
@@ -279,7 +328,7 @@ function updateForecastHighlights() {
         highlights_cards = `${highlights_cards}
         <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 col-xl">
             <div class="card forecast-card">
-                <h6 class="card-subtitle">${getDayName(date).substring(0, 3)}</h6>
+                <h6 class="card-subtitle">${index !== 0 ? getDayName(date).substring(0, 3) : 'Today'}</h6>
                 <img src="${condition_image}" class="card-img-top forecast-image" alt="weather-image">
                 <div class="card-body p-0">
                     <p class="card-text">

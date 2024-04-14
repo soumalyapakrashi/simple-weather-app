@@ -10,6 +10,7 @@ export async function getLocationDataFromString(params) {
     };
 }
 
+// This endpoint not used any more as we are getting the data from forecast api
 export async function getWeatherData(params) {
     const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${WEATHERAPI_API_KEY}&q=${params?.latitude},${params?.longitude}&aqi=no`);
     const weather_data = await response?.json();

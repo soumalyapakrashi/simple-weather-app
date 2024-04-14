@@ -4,20 +4,15 @@ body {
 
 .highlights {
     background-color: rgb(245, 245, 245);
-    width: 100%;
-    flex-basis: 75%;
     padding: 30px;
+    min-height: 100vh;
 }
 
 .current-data {
-    width: 100%;
-    flex-basis: 25%;
-    margin: 20px;
+    padding: 20px;
 }
 
 .main-content {
-    display: flex;
-    flex-direction: row;
     min-height: 100vh;
 }
 
@@ -38,15 +33,12 @@ body {
     font-weight: 400;
 }
 
-#feels-like-img {
+.current-data-img {
     height: 20px;
     margin-right: 5px;
 }
 
 #highlights-grid {
-    /* display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 15px; */
     margin: 20px 0px;
 }
 
@@ -62,6 +54,10 @@ body {
 .card-unit {
     font-size: 1rem;
     margin: 0px 0px 0px 5px;
+}
+
+.no-margin {
+    margin: 0px;
 }
 
 #highlights-header {
@@ -134,4 +130,20 @@ body {
 
 .card-body-no-right-padding {
     padding-right: 0px !important;
+}
+
+.selectpicker {
+    border: none;
+}
+
+.form-select:focus {
+    outline: none;
+}
+
+#liveToast img {
+    height: 20px;
+}
+
+#liveToast {
+    color: #dc3545;
 }
