@@ -36,14 +36,16 @@ document.querySelector('#fahrenheit').addEventListener('change', event => {
 function getDataFromAPI(location) {
     callAPIService(getLocationDataFromString, { query: location })
     .then(data => {
+        console.log(data);
         geocoding_data = data;
         return callAPIService(getFutureWeatherData, {
-            latitude: geocoding_data?.data[0]?.latitude,
-            longitude: geocoding_data?.data[0]?.longitude,
+            latitude: geocoding_data[0]?.lat,
+            longitude: geocoding_data[0]?.lon,
             days: 8
         });
     })
     .then(data => {
+        console.log(data)
         weather_data = data;
         if(highlights_points === null) setHighlightsPoints();
         updateUI();
@@ -82,7 +84,7 @@ function updateCurrentWeatherData() {
 
     // Update the location data showing the location of the entered string
     const location_data = document.querySelector('#location-data');
-    location_data.innerHTML = `<img src="../assets/svg/Location.svg" alt="feels-like" class="current-data-img">${geocoding_data?.data[0]?.label}`;
+    location_data.innerHTML = `<img src="../assets/svg/Location.svg" alt="feels-like" class="current-data-img">${geocoding_data[0]?.display_name}`;
 
     // Update the current date
     const current_date = document.querySelector('#current-date');
