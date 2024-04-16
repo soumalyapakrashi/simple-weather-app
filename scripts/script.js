@@ -84,7 +84,7 @@ function updateCurrentWeatherData() {
 
     // Update the location data showing the location of the entered string
     const location_data = document.querySelector('#location-data');
-    location_data.innerHTML = `<img src="../assets/svg/Location.svg" alt="feels-like" class="current-data-img">${geocoding_data[0]?.display_name}`;
+    location_data.innerHTML = `<img src="assets/svg/Location.svg" alt="feels-like" class="current-data-img">${geocoding_data[0]?.display_name}`;
 
     // Update the current date
     const current_date = document.querySelector('#current-date');
@@ -93,10 +93,10 @@ function updateCurrentWeatherData() {
     // Update the feels like
     const feels_like = document.querySelector('#current-feels-like');
     if(temperature_metric === 'celsius') {
-        feels_like.innerHTML = `<img src="../assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_c}°C`;
+        feels_like.innerHTML = `<img src="assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_c}°C`;
     }
     else if(temperature_metric === 'fahrenheit') {
-        feels_like.innerHTML = `<img src="../assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_f}°F`;
+        feels_like.innerHTML = `<img src="assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_f}°F`;
     }
 }
 
@@ -113,7 +113,7 @@ function setHighlightsPoints() {
                 else if(value > 7 && value <= 10) return 'Very High'
                 else if(value > 10) return 'Extreme'
             },
-            img: '../assets/svg/UV Index.svg'
+            img: 'assets/svg/UV Index.svg'
         },
         {
             title: 'Humidity',
@@ -124,7 +124,7 @@ function setHighlightsPoints() {
                 else if(value >= 50 && value <= 80) return 'High';
                 else if(value > 80) return 'Very High';
             },
-            img: '../assets/svg/Humidity 2.svg'
+            img: 'assets/svg/Humidity 2.svg'
         },
         {
             title: 'Wind Speed',
@@ -165,7 +165,7 @@ function setHighlightsPoints() {
                     else if(value > 72) return 'Hurricane'
                 }
             },
-            img: '../assets/svg/Wind Speed Updated.svg',
+            img: 'assets/svg/Wind Speed Updated.svg',
             multiple_units: true,
             multiple_values: [ 'km/h', 'mph' ]
         },
@@ -174,7 +174,7 @@ function setHighlightsPoints() {
             value: unit => `${weather_data?.current?.wind_degree}°`,
             unit: `${weather_data?.current?.wind_dir}`,
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Wind Direction.svg'
+            img: 'assets/svg/Wind Direction.svg'
         },
         {
             title: 'Visibility',
@@ -184,7 +184,7 @@ function setHighlightsPoints() {
             },
             unit: 'km',
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Visibility.svg',
+            img: 'assets/svg/Visibility.svg',
             multiple_units: true,
             multiple_values: [ 'km', 'mi' ]
         },
@@ -196,7 +196,7 @@ function setHighlightsPoints() {
             },
             unit: 'mm',
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Precipitation.svg',
+            img: 'assets/svg/Precipitation.svg',
             multiple_units: true,
             multiple_values: [ 'mm', 'in' ]
         },
@@ -208,7 +208,7 @@ function setHighlightsPoints() {
             },
             unit: 'in',
             text: (value, unit) => { return '' },
-            img: '../assets/svg/Pressure.svg',
+            img: 'assets/svg/Pressure.svg',
             multiple_units: true,
             multiple_values: [ 'in', 'mb' ]
         },
@@ -223,7 +223,7 @@ function setHighlightsPoints() {
                 else if(value >= 6 && value < 7) return 'Heavy Clouds';
                 else if(value >= 7) return 'Overcast';
             },
-            img: '../assets/svg/Cloud.svg'
+            img: 'assets/svg/Cloud.svg'
         }
     ];
 }
