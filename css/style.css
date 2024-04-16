@@ -148,3 +148,7 @@ body {
 #liveToast {
     color: #dc3545;
 }
+
+#error-icon {
+    height: 20px;
+}
