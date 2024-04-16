@@ -134,6 +134,7 @@ body {
 
 .selectpicker {
     border: none;
+    cursor: pointer;
 }
 
 .form-select:focus {
