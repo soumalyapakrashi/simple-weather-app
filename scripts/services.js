@@ -2,7 +2,7 @@ const POSITIONSTACK_API_KEY = 'ea6a9021e0c1baa29c4bac6c4baae0ec';
 const WEATHERAPI_API_KEY = '412243e4cd9f4a73a60185739241104';
 
 export async function getLocationDataFromString(params) {
-    const response = await fetch(`http://api.positionstack.com/v1/forward?access_key=${POSITIONSTACK_API_KEY}&query=${encodeURIComponent(params?.query)}`);
+    const response = await fetch(`https://api.positionstack.com/v1/forward?access_key=${POSITIONSTACK_API_KEY}&query=${encodeURIComponent(params?.query)}`);
     const geocoding_data = await response?.json();
     return {
         status_code: response?.status,
