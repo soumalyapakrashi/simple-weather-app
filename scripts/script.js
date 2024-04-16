@@ -1,6 +1,7 @@
 import { callAPIService, getDayName  } from "./utils.js";
 import { getLocationDataFromString, getFutureWeatherData } from "./services.js";
 
+// Declare global variables
 let weather_data = null;
 let geocoding_data = null;
 let temperature_metric = 'celsius';
