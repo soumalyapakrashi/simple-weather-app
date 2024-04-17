@@ -152,3 +152,19 @@ body {
 #error-icon {
     height: 20px;
 }
+
+.show-data {
+    display: block !important;
+}
+
+.no-show-data {
+    display: none !important;
+}
+
+.show-loader {
+    display: flex;
+}
+
+.loader-data {
+    min-height: 100vh;
+}

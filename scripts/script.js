@@ -34,6 +34,15 @@ document.querySelector('#fahrenheit').addEventListener('change', event => {
 });
 
 function getDataFromAPI(location) {
+    const weather_data_elements = document.querySelectorAll('.weather-data');
+    const loader_data_elements = document.querySelector('.loader-data')
+    weather_data_elements.forEach(element => {
+        element.classList.remove('show-data');
+        element.classList.add('no-show-data');
+    });
+    loader_data_elements.classList.remove('no-show-data');
+    loader_data_elements.classList.add('show-loader');
+
     callAPIService(getLocationDataFromString, { query: location })
     .then(data => {
         console.log(data);
@@ -49,6 +58,13 @@ function getDataFromAPI(location) {
         weather_data = data;
         if(highlights_points === null) setHighlightsPoints();
         updateUI();
+
+        loader_data_elements.classList.remove('show-loader');
+        loader_data_elements.classList.add('no-show-data');
+        weather_data_elements.forEach(element => {
+            element.classList.remove('no-show-data');
+            element.classList.add('show-data');
+        });
     })
     .catch(error => {
         document.querySelector('.toast-body').innerHTML = error;
