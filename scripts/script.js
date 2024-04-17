@@ -45,7 +45,6 @@ function getDataFromAPI(location) {
 
     callAPIService(getLocationDataFromString, { query: location })
     .then(data => {
-        console.log(data);
         geocoding_data = data;
         return callAPIService(getFutureWeatherData, {
             latitude: geocoding_data[0]?.lat,
@@ -54,7 +53,6 @@ function getDataFromAPI(location) {
         });
     })
     .then(data => {
-        console.log(data)
         weather_data = data;
         if(highlights_points === null) setHighlightsPoints();
         updateUI();
@@ -71,6 +69,13 @@ function getDataFromAPI(location) {
         const toast = document.querySelector('#live-toast');
         const toast_bootstrap = bootstrap.Toast.getOrCreateInstance(toast);
         toast_bootstrap.show();
+
+        loader_data_elements.classList.remove('show-loader');
+        loader_data_elements.classList.add('no-show-data');
+        weather_data_elements.forEach(element => {
+            element.classList.remove('no-show-data');
+            element.classList.add('show-data');
+        });
     })
 }
 

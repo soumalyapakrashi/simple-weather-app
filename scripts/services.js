@@ -1,7 +1,10 @@
-const POSITIONSTACK_API_KEY = 'ea6a9021e0c1baa29c4bac6c4baae0ec';
 const WEATHERAPI_API_KEY = '412243e4cd9f4a73a60185739241104';
 
 export async function getLocationDataFromString(params) {
+    if(params.query.trim() === '') {
+        throw 'No input provided';
+    }
+
     const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(params?.query)}&format=json`);
     const geocoding_data = await response?.json();
     return {
