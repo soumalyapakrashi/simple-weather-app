@@ -356,8 +356,8 @@ function updateForecastHighlights() {
                 <img src="${condition_image}" class="card-img-top forecast-image" alt="weather-image">
                 <div class="card-body p-0">
                     <p class="card-text">
-                        <span class="forecast-max-temp">${Math.round(max_temp)}°</span>
-                        <span class="forecast-min-temp">${Math.round(min_temp)}°</span>
+                        <span class="forecast-max-temp" title="Max Temp">${Math.round(max_temp)}°</span>
+                        <span class="forecast-min-temp" title="Min Temp">${Math.round(min_temp)}°</span>
                     </p>
                 </div>
             </div>
