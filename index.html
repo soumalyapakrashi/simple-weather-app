@@ -9,11 +9,18 @@
 </head>
 <body>
     <main class="main-content">
+        <!-- This is the main content of the page. It contains 2 columns in a bigger screen -->
+        <!-- and 2 rows in a smaller screen. For this transition to happen, we are using Grids. -->
         <div class="row w-100 min-vh-100 gx-0">
+            <!-- Section showing the current details and search box -->
             <div class="col-sm-4 col-md-3">
                 <section class="current-data container">
+                    <!-- Search box -->
                     <form id="location-search">
+                        <!-- The input-group-sm class is used here so that we can get a smaller -->
+                        <!-- form element. -->
                         <div class="input-group input-group-sm">
+                            <!-- The search box will be automatically focused when page is loaded. -->
                             <input type="search" class="form-control rounded" placeholder="Search" name="search" autofocus/>
                             <button class="input-group-text border-0" id="search-addon" type="submit" name="submit">
                                 <img src="./assets/svg/search-svgrepo-com.svg" alt="search-icon" id="search-icon">
@@ -21,6 +28,8 @@
                         </div>
                     </form>
                     
+                    <!-- This section shows the weather, location, and time data. -->
+                    <!-- This is a placeholder section and data is populated from script.js -->
                     <div class="weather-data">
                         <div id="current-weather-image"></div>
                         <h1 id="current-temperature"></h1>
@@ -32,8 +41,11 @@
         
                 </section>
             </div>
+
+            <!-- Section shows the current weather highlights and future predictions -->
             <div class="col-sm-8 col-md-9">
                 <section class="highlights container">
+                    <!-- Loader which is displayed when data is being fetched from API -->
                     <div class="d-flex justify-content-center align-items-center loader-data">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -41,6 +53,9 @@
                     </div>
                     
                     <div class="weather-data"></div>
+                        <!-- This section provides 2 controls for either selecting to view temperatures -->
+                        <!-- in degree Celsius or in Fahrenheit. The controls are implemented as a -->
+                        <!-- toggle button so that any one option can be chosen at a time. -->
                         <div id="controls">
                             <div id="temperature-toggle">
                                 <div>
@@ -54,10 +69,15 @@
                             </div>
                         </div>
 
+                        <!-- This placeholder section shows the future forecast data. -->
+                        <!-- It shows the Day of week, image of average condition of day, minimum -->
+                        <!-- temperature, and maximum temperature. -->
                         <div id="forecast-highlights">
                             <div class="row gx-2 gy-2"></div>
                         </div>
             
+                        <!-- This section shows various highlights of current day such as -->
+                        <!-- humidity, wind speed and direction, precipitation, etc. -->
                         <div class="todays-highlights">
                             <h6 id="highlights-header"></h6>
                             <div id="highlights-grid">
@@ -70,6 +90,7 @@
         </div>
     </main>
 
+    <!-- Toast message which is shown if there is any error. This shows the error message to users. -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="live-toast" class="toast border border-danger" role="alert">
             <div class="toast-header bg-danger text-light">

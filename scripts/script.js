@@ -1,41 +1,62 @@
 import { callAPIService, getDayName  } from "./utils.js";
 import { getLocationDataFromString, getFutureWeatherData } from "./services.js";
 
-// Declare global variables
+// Declare global variables with default values
 let weather_data = null;
 let geocoding_data = null;
 let temperature_metric = 'celsius';
 const DEFAULT_LOCATION = 'Kolkata';
 let highlights_points = null;
 
-// Search form fetches the weather for the entered location.
-// Location is matched with the closest name matching the input string.
-const location_search_form = document.querySelector('#location-search');
+// Perform default data fetch and attach event handlers on page load.
+window.addEventListener('load', _ => {
+    // Search form fetches the weather for the entered location.
+    // Location is matched with the closest name matching the input string.
+    const location_search_form = document.querySelector('#location-search');
 
-location_search_form.addEventListener('submit', event => {
-    event.preventDefault();
-    getDataFromAPI(event?.target?.search?.value);
-});
+    location_search_form.addEventListener('submit', event => {
+        // Prevent the form from submitting and reloading the page.
+        event.preventDefault();
+        // Call the API service with the data entered in the search field.
+        getDataFromAPI(event?.target?.search?.value);
+    });
 
-// Default data to show when page loads.
-window.addEventListener('load', event => {
+    // By default, call API service with the default location during page load.
     getDataFromAPI(DEFAULT_LOCATION);
+
+    /* 
+        If user chooses celsius as the temperature metric, update the global variable and 
+        re-render the UI. This will update all temperature values to Celsius scale.
+    */
+    document.querySelector('#celsius').addEventListener('change', _ => {
+        temperature_metric = 'celsius';
+        updateUI();
+    });
+
+    /* 
+        If user chooses fahrenheit as the temperature metric, update the global variable and 
+        re-render the UI. This will update all temperature values to Fahrenheit scale.
+    */
+    document.querySelector('#fahrenheit').addEventListener('change', _ => {
+        temperature_metric = 'fahrenheit';
+        updateUI();
+    });
 });
 
-// If user chooses celsius as the temperature metric
-document.querySelector('#celsius').addEventListener('change', event => {
-    temperature_metric = 'celsius';
-    updateUI();
-});
-
-document.querySelector('#fahrenheit').addEventListener('change', event => {
-    temperature_metric = 'fahrenheit';
-    updateUI();
-});
-
+/*
+    This function fetches data from API. It also shows a loader while data is being fetched
+    and hides the loader when data is ready to be displayed. Finally, it renders the entire UI
+    when data fetch is complete.
+*/
 function getDataFromAPI(location) {
+    /*
+        Get references to weather data elements and loader elements which will be used to
+        hide and un-hide data.
+    */
     const weather_data_elements = document.querySelectorAll('.weather-data');
-    const loader_data_elements = document.querySelector('.loader-data')
+    const loader_data_elements = document.querySelector('.loader-data');
+
+    // Before starting data fetch, hide the weather data and show the loader.
     weather_data_elements.forEach(element => {
         element.classList.remove('show-data');
         element.classList.add('no-show-data');
@@ -43,9 +64,15 @@ function getDataFromAPI(location) {
     loader_data_elements.classList.remove('no-show-data');
     loader_data_elements.classList.add('show-loader');
 
+    // Get location data from Geocoding API using search string (or default location) as parameter.
     callAPIService(getLocationDataFromString, { query: location })
     .then(data => {
         geocoding_data = data;
+
+        /*
+            Get weather data from Weather API using latitude and longitude obtained from above,
+            and number of days for forecast as parameter.
+        */
         return callAPIService(getFutureWeatherData, {
             latitude: geocoding_data[0]?.lat,
             longitude: geocoding_data[0]?.lon,
@@ -54,9 +81,19 @@ function getDataFromAPI(location) {
     })
     .then(data => {
         weather_data = data;
+
+        /*
+            highlights_points stores the details regarding data such as humidity, precipitation, etc.
+            This is fetched from the API and stored in this object for easier accessibility and
+            update from code. Initially, this variable is set to null as there is no data. When
+            data is first fetched from API, this variable is populated here.
+        */
         if(highlights_points === null) setHighlightsPoints();
+
+        // After all data is fetched, render the entire UI.
         updateUI();
 
+        // By here, data has been loaded. Hide the loader and display the weather data.
         loader_data_elements.classList.remove('show-loader');
         loader_data_elements.classList.add('no-show-data');
         weather_data_elements.forEach(element => {
@@ -65,11 +102,13 @@ function getDataFromAPI(location) {
         });
     })
     .catch(error => {
+        // On error, trigger the toast showing the error message.
         document.querySelector('.toast-body').innerHTML = error;
         const toast = document.querySelector('#live-toast');
         const toast_bootstrap = bootstrap.Toast.getOrCreateInstance(toast);
         toast_bootstrap.show();
 
+        // Hide the loader and show the last fetched data.
         loader_data_elements.classList.remove('show-loader');
         loader_data_elements.classList.add('no-show-data');
         weather_data_elements.forEach(element => {
@@ -79,18 +118,20 @@ function getDataFromAPI(location) {
     })
 }
 
+// This function initiates render of entire UI.
 function updateUI() {
     updateCurrentWeatherData();
     updateTodaysHighlights();
     updateForecastHighlights();
 }
 
+// This function renders the current weaather, time, and location data.
 function updateCurrentWeatherData() {
-    // Update the current weather image
+    // Update the current weather image.
     const current_weather_image = document.querySelector('#current-weather-image');
     current_weather_image.innerHTML = `<img src="${weather_data?.current?.condition?.icon}" alt="weather-image" class="current-weather-image-img">`;
 
-    // Update the current temperature
+    // Update the current temperature.
     const current_temperature = document.querySelector('#current-temperature');
     if(temperature_metric === 'celsius') {
         current_temperature.innerHTML = `${weather_data?.current?.temp_c}°C`;
@@ -99,19 +140,19 @@ function updateCurrentWeatherData() {
         current_temperature.innerHTML = `${weather_data?.current?.temp_f}°F`;
     }
 
-    // Update the weather condition text
+    // Update the curent weather condition text.
     const weather_condition_text = document.querySelector('#weather-condition-text');
     weather_condition_text.innerHTML = `${weather_data?.current?.condition?.text}`;
 
-    // Update the location data showing the location of the entered string
+    // Update the location data showing the location of the entered string.
     const location_data = document.querySelector('#location-data');
-    location_data.innerHTML = `<img src="assets/svg/Location.svg" alt="feels-like" class="current-data-img">${geocoding_data[0]?.display_name}`;
+    location_data.innerHTML = `<img src="assets/svg/Location.svg" alt="location" class="current-data-img">${geocoding_data[0]?.display_name}`;
 
-    // Update the current date
+    // Update the current day of week and time.
     const current_date = document.querySelector('#current-date');
     current_date.innerHTML = `${getDayName(weather_data?.location?.localtime.split(' ')[0])}, ${weather_data?.location?.localtime.split(' ')[1]}`;
 
-    // Update the feels like
+    // Update the feels like temperature.
     const feels_like = document.querySelector('#current-feels-like');
     if(temperature_metric === 'celsius') {
         feels_like.innerHTML = `<img src="assets/svg/Feels Like.svg" alt="feels-like" class="current-data-img">Feels Like: ${weather_data?.current?.feelslike_c}°C`;
@@ -121,6 +162,11 @@ function updateCurrentWeatherData() {
     }
 }
 
+/*
+    This function populates the 'highlights_points' list with metrics such as humidity, precipitation,
+    etc. This data is obtained from the Weather API. Setting these data in the global variable in the
+    below format helps in easier rendering and updation of further fetched data and UI.
+*/
 function setHighlightsPoints() {
     highlights_points = [
         {
@@ -249,16 +295,19 @@ function setHighlightsPoints() {
     ];
 }
 
+// Function renders details including humidity, precipitation, wind, etc.
 function updateTodaysHighlights() {
+    // Set the header for the section.
     document.querySelector('#highlights-header').innerHTML = "Today's Highlights";
 
     const highlights_grid = document.querySelector('#highlights-grid .row');
     let highlights_cards = '';
 
+    // Function renders a single card which does not have multiple metric values.
     const HighlightsCardSingleUnit = point => {
         return `
         <div class="card h-100">
-            <div class="row g-0">
+            <div class="row g-0 h-100">
                 <div class="col-md-8">
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
@@ -272,9 +321,11 @@ function updateTodaysHighlights() {
             </div>
         </div>
         `;
-    }
+    };
     
+    // Function renders a single card which has multiple metric values.
     const HighlightsCardMultiUnit = point => {
+        // Create a dropdown from which users can select in which unit to display the metric.
         const dropdownListGenerator = each_point => {
             let dropdown_string = '';
             each_point.multiple_values.forEach(value => {
@@ -287,7 +338,7 @@ function updateTodaysHighlights() {
     
         return `
         <div class="card h-100">
-            <div class="row g-0">
+            <div class="row g-0 h-100">
                 <div class="col-md-8">
                     <div class="card-body card-body-no-right-padding">
                         <h6 class="card-subtitle mb-2 text-body-secondary">${point.title}</h6>
@@ -311,8 +362,12 @@ function updateTodaysHighlights() {
             </div>
         </div>
         `;
-    }
+    };
 
+    /*
+        Layout all the cards in a grid. For each card, based on if multiple metric values need
+        to be displayed, call the respective functions which generates the corresponding cards.
+    */
     highlights_points.forEach(point => {
         highlights_cards = `${highlights_cards}
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
@@ -323,6 +378,12 @@ function updateTodaysHighlights() {
 
     highlights_grid.innerHTML = highlights_cards;
 
+    /*
+        Handler function to change the metric value in the card. It just updates the 'highlights_points'
+        list with the new unit for corresponding element and the remaining value update is handled
+        through the function defined in the list itself. After that, it renders only the highlights
+        section.
+    */
     const handleUnitChange = (title, value) => {
         // Find the index of the object with the matching title
         const index = highlights_points.findIndex(point => point.title === title);
@@ -339,10 +400,12 @@ function updateTodaysHighlights() {
     })
 }
 
+// Render the forecast section of the UI.
 function updateForecastHighlights() {
     const forecast_grid = document.querySelector('#forecast-highlights .row');
     let highlights_cards = '';
 
+    // Iterates over each day of forecast data available, and renders them as a Card.
     weather_data?.forecast?.forecastday.forEach((day, index) => {
         const condition_image = day?.day?.condition?.icon;
         const date = day?.date;
