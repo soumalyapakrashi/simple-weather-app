@@ -196,12 +196,12 @@ function setHighlightsPoints() {
         {
             title: 'Wind Speed',
             value: unit => {
-                if(unit === 'km/h') return weather_data?.current?.wind_kph;
+                if(unit === 'kmph') return weather_data?.current?.wind_kph;
                 else if(unit === 'mph') return weather_data?.current?.wind_mph;
             },
-            unit: 'km/h',
+            unit: 'kmph',
             text: (value, unit) => {
-                if(unit === 'km/h') {
+                if(unit === 'kmph') {
                     if(value < 1) return 'Calm'
                     else if(value >= 1 && value <= 5) return 'Light Air'
                     else if(value > 5 && value <= 11) return 'Light Breeze'
@@ -234,7 +234,7 @@ function setHighlightsPoints() {
             },
             img: 'assets/svg/Wind Speed Updated.svg',
             multiple_units: true,
-            multiple_values: [ 'km/h', 'mph' ]
+            multiple_values: [ 'kmph', 'mph' ]
         },
         {
             title: 'Wind Direction',
