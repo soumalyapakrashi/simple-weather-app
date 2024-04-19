@@ -1,11 +1,15 @@
 import { callAPIService, getDayName, getDateString  } from "./utils.js";
 import { getLocationDataFromString, getFutureWeatherData } from "./services.js";
 
-// Declare global variables with default values
+// Global variable stores the weather data fetched from API.
 let weather_data = null;
+// Global variable stores the geocoding data fetched from API.
 let geocoding_data = null;
+// Global variable which acts as a flag to denote whether temperature is shown in celsius or fahrenheit.
 let temperature_metric = 'celsius';
+// Default location to show weather data for when page is loaded.
 const DEFAULT_LOCATION = 'Kolkata';
+// Stores the details of each weather metric (humidity, uv index, etc.)
 let highlights_points = null;
 
 // Perform default data fetch and attach event handlers on page load.
@@ -47,6 +51,11 @@ window.addEventListener('load', _ => {
     This function fetches data from API. It also shows a loader while data is being fetched
     and hides the loader when data is ready to be displayed. Finally, it renders the entire UI
     when data fetch is complete.
+
+    Function Inputs:
+    1. location: Location string for which weather data needs to be displayed.
+
+    Function Returns: None
 */
 function getDataFromAPI(location) {
     /*
@@ -118,14 +127,24 @@ function getDataFromAPI(location) {
     })
 }
 
-// This function initiates render of entire UI.
+/*
+    This function initiates render of entire UI.
+
+    Function Inputs: None
+    Function Returns: None
+*/
 function updateUI() {
     updateCurrentWeatherData();
     updateTodaysHighlights();
     updateForecastHighlights();
 }
 
-// This function renders the current weaather, time, and location data.
+/*
+    This function renders the current weather, time, and location data.
+
+    Function Inputs: None
+    Function Returns: None
+*/
 function updateCurrentWeatherData() {
     // Update the current weather image.
     const current_weather_image = document.querySelector('#current-weather-image');
@@ -168,6 +187,23 @@ function updateCurrentWeatherData() {
     This function populates the 'highlights_points' list with metrics such as humidity, precipitation,
     etc. This data is obtained from the Weather API. Setting these data in the global variable in the
     below format helps in easier rendering and updation of further fetched data and UI.
+
+    Each item in the list is of the following format:
+    {
+        title (string): String stores the name of the weather metric (ex, humidity, uv index, etc.),
+        value (function): Inputs the unit and returns the value for the corresponding unit,
+        unit (string): Unit in which value needs to be displayed. Empty if not applicable,
+        text (function): Inputs the value and unit and returns a description of the metric condition
+            according to standards (references of the standards are mentioned in README.md),
+        img (string): Link to an image asset which needs to be displayed per metric,
+        multiple_units (boolean): Indicates whether the corresponding metric can be displayed in more
+            than 1 unit. Acceptable values are 'true' and 'false',
+        multiple_values (list): A list containing the different metric units that are supported
+            for the corresponding metric.
+    }
+
+    Function Inputs: None
+    Function Returns: None
 */
 function setHighlightsPoints() {
     highlights_points = [
@@ -297,7 +333,12 @@ function setHighlightsPoints() {
     ];
 }
 
-// Function renders details including humidity, precipitation, wind, etc.
+/*
+    Function renders details including humidity, precipitation, wind, etc.
+
+    Function Inputs: None
+    Function Returns: None
+*/
 function updateTodaysHighlights() {
     // Set the header for the section.
     document.querySelector('#highlights-header').innerHTML = "Today's Highlights";
@@ -305,7 +346,15 @@ function updateTodaysHighlights() {
     const highlights_grid = document.querySelector('#highlights-grid .row');
     let highlights_cards = '';
 
-    // Function renders a single card which does not have multiple metric values.
+    /*
+        Function renders a single card which does not have multiple metric values.
+
+        Function Inputs:
+        1. point: This contains details of weather metric. This is equivalent to each element
+            in the highlights_points list.
+        
+        Function Returns: Rendered HTML of the card containing the metric.
+    */
     const HighlightsCardSingleUnit = point => {
         return `
         <div class="card h-100">
@@ -325,7 +374,15 @@ function updateTodaysHighlights() {
         `;
     };
     
-    // Function renders a single card which has multiple metric values.
+    /*
+        Function renders a single card which has multiple metric values.
+
+        Function Inputs:
+        1. point: This contains details of weather metric. This is equivalent to each element
+            in the highlights_points list.
+        
+        Function Returns: Rendered HTML of the card containing the metric.
+    */
     const HighlightsCardMultiUnit = point => {
         // Create a dropdown from which users can select in which unit to display the metric.
         const dropdownListGenerator = each_point => {
@@ -385,6 +442,12 @@ function updateTodaysHighlights() {
         list with the new unit for corresponding element and the remaining value update is handled
         through the function defined in the list itself. After that, it renders only the highlights
         section.
+
+        Function Inputs:
+        1. title: The title of the metric for which unit is changed.
+        2. value: The new value of the unit after the change.
+
+        Function Returns: None
     */
     const handleUnitChange = (title, value) => {
         // Find the index of the object with the matching title
@@ -393,16 +456,23 @@ function updateTodaysHighlights() {
         // Update the unit property of the object at that index
         highlights_points[index].unit = value;
 
+        // Update the UI
         updateTodaysHighlights();
     };
 
+    // Add event listeners to each select picker added to the UI.
     const selects = document.querySelectorAll('.selectpicker');
     selects.forEach(select => {
         select.addEventListener('change', event => handleUnitChange(event.target.name, event.target.value));
     })
 }
 
-// Render the forecast section of the UI.
+/*
+    Render the forecast section of the UI.
+
+    Function Inputs: None
+    Function Returns: None
+*/
 function updateForecastHighlights() {
     const forecast_grid = document.querySelector('#forecast-highlights .row');
     let highlights_cards = '';
