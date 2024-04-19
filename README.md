@@ -1,4 +1,8 @@
+[![pages-build-deployment](https://github.com/soumalyapakrashi/simple-weather-app/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/soumalyapakrashi/simple-weather-app/actions/workflows/pages/pages-build-deployment)
+
 # Weather App
+
+**Live Site Link:** https://soumalyapakrashi.github.io/simple-weather-app/
 
 ## Contents
 
@@ -16,7 +20,7 @@ When page is first loaded, weather data is fetched for **Kolkata** by default an
 
 ### Loader during data fetch
 
-When data is being fetched from Geocoding or Weather API, a loader is displayed. When data has been fatched and is ready to be displayed, loader is hidden.
+When data is being fetched from Geocoding or Weather API, a loader is displayed. When data has been fetched and is ready to be displayed, loader is hidden.
 
 ![Data Fetch Loader](assets/img/loader-during-data-fetch.jpg)
 
@@ -28,7 +32,7 @@ When page is loaded, the search input field is automatically focused so that use
 
 Users can search for any location (or address) and the weather details for the corresponding location will be displayed. This works for city names, addresses, street names, etc. This feature is enabled with the help of Geocoding API which returns the location data which closely matches the search string provided as input.
 
-**Note:** As the Geocoding API matches locations which closely matches the input provided, sometimes, this can provide undesirable output. For example, we might want to get information about _Salt Lake Sector 5_ in _Kolkata_, but if we just search for _Salt Lake Sector 5_, it might return data for _Salt Lake, United States_. In such cases, providing more information will resolve the issue. For example, giving _Salt Lake Sector 5, Kolkata_ will fetch the correct data.
+**Note:** As the Geocoding API matches locations which closely match the input provided, sometimes, this can provide undesirable output. For example, we might want to get information about _Salt Lake Sector 5_ in _Kolkata_, but if we just search for _Salt Lake Sector 5_, it might return data for _Salt Lake, United States_. In such cases, providing more information will resolve the issue. For example, giving _Salt Lake Sector 5, Kolkata_ will fetch the correct data.
 
 ### Current weather information
 
@@ -37,9 +41,9 @@ The following weather information are displayed for the current day.
 * Temperature
 * Weather condition (like cloudy, sunny)
 * Feels like temperature
-* UV Index
+* UV index
 * Relative humidity
-* Wind Speed
+* Wind speed
 * Wind direction
 * Visibility
 * Precipitation
@@ -54,7 +58,7 @@ All temperature data can be displayed either in Celsius or Fahrenheit. A toggle 
 
 For some of the individual cards, the displayed metric can be changed as well. Below is the list of metrics which can be changed to a different metric and their acceptable metrics:
 
-* Wind speed - _km/h_ and _mph_
+* Wind speed - _kmph_ and _mph_
 * Visibility - _km_ and _mi_
 * Precipitation - _mm_ and _in_
 * Pressure - _in_ and _mb_
@@ -73,20 +77,38 @@ where
 
 ### Future weather prediction
 
-Weather data for future 7 days is displayed in the predictions section. Per each card, the following inforamtion is displayed:
+Weather data for future 7 days is displayed in the predictions section. Per each card, the following information is displayed:
 
 * Day of week
 * Image of the average weather condition
 * Maximum temperature
 * Minimum temperature
 
+**Important Note:** The API used to fetch weather data has both free and paid plans. In the paid plan, 8 days of future prediction can be fetched, but in the free version, only 3 days of forecast is available. During new sign-up, the API provides free trial to the paid plan for a fixed number of days after which the plan is automatically switched to the free version. Currently, the date of expiry of the paid trial is 25th April, 2024. So, up to that date, 8 future forecast dates will be shown in the app. After that day, only 3 future forecast dates will be shown.
+
 ### Error handling
 
 An appropriate error message is displayed if there is any error in the app, for example, if user enters a location which cannot be matched to any supported location by the Geocoding API, then an error message is shown.
 
-Also, after an error occurs, the last successfully fetched data is shown in the weather informatin sections.
+Also, after an error occurs, the last successfully fetched data is shown in the weather information sections.
 
 ![Error message](assets/img/error.jpg)
+
+### Responsive design
+
+The webpage is made responsive by design so that users can enjoy a seamless experience both in bigger screens like laptops and desktops as well as in smaller screens like mobiles and tablets.
+
+#### Desktop view
+
+![Desktop View](assets/img/desktop-view.jpg)
+
+#### Tablet view
+
+![Tablet View](assets/img/tablet-view.jpg)
+
+#### Mobile view
+
+![Mobile View](assets/img/mobile-view.jpg)
 
 ## Setup Instructions
 
