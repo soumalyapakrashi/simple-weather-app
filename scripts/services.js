@@ -32,8 +32,13 @@ export async function getWeatherData(params) {
     logitude, and number of days for forecast given.
 */
 export async function getFutureWeatherData(params) {
-    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${WEATHERAPI_API_KEY}&q=${params?.latitude},${params?.longitude}&days=${params.days}&aqi=no&alerts=no`);
-    const forecast_data = await response?.json();
+    let response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${WEATHERAPI_API_KEY}&q=${params?.latitude},${params?.longitude}&days=${params?.days}&aqi=no&alerts=no`);
+    if(response?.status === 403) {
+        reponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${WEATHERAPI_API_KEY}&q=${params?.latitude},${params?.longitude}&days=3&aqi=no&alerts=no`);
+    }
+
+    let forecast_data = await response?.json();
+    
     return {
         status_code: response?.status,
         data: forecast_data
