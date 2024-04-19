@@ -137,3 +137,4 @@ git clone https://github.com/soumalyapakrashi/simple-weather-app.git
 5. UV Index ranges referenced from [United States Environmental Protection Agency](https://www.epa.gov/sites/default/files/documents/uviguide.pdf)
 6. Humidity Categorization Data from [ResearchGate](https://www.researchgate.net/figure/Relative-humidity-categorization_tbl1_42385503)
 7. Icon SVGs from [SVGRepo](https://www.svgrepo.com/).
+8. UI Design reference from [Dribble](https://dribbble.com/shots/20449736-Weather-App).
