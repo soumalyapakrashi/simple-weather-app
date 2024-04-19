@@ -1,4 +1,4 @@
-import { callAPIService, getDayName  } from "./utils.js";
+import { callAPIService, getDayName, getDateString  } from "./utils.js";
 import { getLocationDataFromString, getFutureWeatherData } from "./services.js";
 
 // Declare global variables with default values
@@ -150,7 +150,9 @@ function updateCurrentWeatherData() {
 
     // Update the current day of week and time.
     const current_date = document.querySelector('#current-date');
-    current_date.innerHTML = `${getDayName(weather_data?.location?.localtime.split(' ')[0])}, ${weather_data?.location?.localtime.split(' ')[1]}`;
+    const date_from_api = weather_data?.location?.localtime.split(' ')[0];
+    const time_from_api = weather_data?.location?.localtime.split(' ')[1];
+    current_date.innerHTML = `${getDayName(date_from_api)}, ${getDateString(date_from_api)}, ${time_from_api}`;
 
     // Update the feels like temperature.
     const feels_like = document.querySelector('#current-feels-like');
