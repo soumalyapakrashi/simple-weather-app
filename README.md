@@ -67,7 +67,7 @@ where
 
 1. km = kilometers
 2. mi = miles
-3. km/h = kilometers per hour
+3. kmph = kilometers per hour
 4. mph = miles per hour
 5. mm = millimeters
 5. in = inches
