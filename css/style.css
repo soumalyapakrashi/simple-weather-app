@@ -168,3 +168,9 @@ body {
 .loader-data {
     min-height: 100vh;
 }
+
+.blue-loader {
+    color: #1750fd;
+    width: 3rem;
+    height: 3rem;
+}
